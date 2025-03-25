@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>检验知识图谱</title>
+    <!-- 引入 Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- 引入 ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        #app {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .chart-container {
+            width: 800px;
+            height: 100vh;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Vue 应用容器 -->
+        <!-- ECharts 图表容器 -->
+        <div ref="chartContainer" class="chart-container" style="width: 100%; height: 800px;"></div>
+    </div>
+
+    <script>
+        const { createApp, ref, onMounted } = Vue;
+
+        const app = createApp({
+            setup() {
+                // const message = ref('医疗知识图谱');
+                const chartContainer = ref(null);
+
+                onMounted(() => {
+                    // 初始化 ECharts 实例
+                    const myChart = echarts.init(chartContainer.value);
+
+                    // 示例图表配置
+                    const option = {
+                        tooltip: {},
+                        series: [
+                            {
+                                type: 'graph',
+                                layout: 'force',
+                                roam: true,
+                                force: { 
+                                    repulsion: 200,
+                                    gravity: 0.1,
+                                    edgeLength: 10,  // 减小边的长度
+                                    layoutAnimation: true
+                                },
+                                label: { 
+                                    show: true,
+                                    fontSize: 14,  // 增大节点标签字体
+                                    fontWeight: 'bold'
+                                },
+                                edgeLabel: {
+                                    show: true,
+                                    position: 'middle',
+                                    formatter: function (params) {
+                                        return params.data.label || '';
+                                    },
+                                    fontSize: 14,  // 增大边标签字体
+                                    color: '#555'
+                                },
+                                edgeSymbol: ['none', 'arrow'],
+                                edgeSymbolSize: 12,  // 增大箭头大小
+                                data: [
+                                    { name: '患者', value: 10, symbolSize: 120, itemStyle: { color: '#FFA500' }, x: 0, y: 0 },
+                                    { name: '红细胞计数', value: 8, symbolSize: 90, itemStyle: { color: '#00BFFF' }, x: 120, y: 0 },
+                                    { name: '血红蛋白', value: 6, symbolSize: 90, itemStyle: { color: '#00BFFF' }, x: -120, y: 0 },
+                                    { name: '白细胞计数', value: 6, symbolSize: 90, itemStyle: { color: '#00BFFF' }, x: -60, y: 60 },
+                                    { name: '淋巴细胞计数', value: 6, symbolSize: 90, itemStyle: { color: '#00BFFF' }, x: 60, y: -60 },
+                                    { name: '适应症1', value: 6, symbolSize: 70, itemStyle: { color: '#32CD32' }, x: 240, y: 0 },
+                                    { name: '临床意义1', value: 6, symbolSize: 70, itemStyle: { color: '#32CD32' }, x: 240, y: 60 },
+                                    { name: '项目说明1', value: 6, symbolSize: 70, itemStyle: { color: '#32CD32' }, x: 240, y: -60 },
+                                    { name: '适应症2', value: 6, symbolSize: 70, itemStyle: { color: '#32CD32' }, x: -240, y: 0 },
+                                    { name: '临床意义2', value: 6, symbolSize: 70, itemStyle: { color: '#32CD32' }, x: -240, y: 60 },
+                                    { name: '项目说明2', value: 6, symbolSize: 70, itemStyle: { color: '#32CD32' }, x: -240, y: -60 },
+                                    { name: '适应症3', value: 6, symbolSize: 70, itemStyle: { color: '#32CD32' }, x: -120, y: 120 },
+                                    { name: '临床意义3', value: 6, symbolSize: 70, itemStyle: { color: '#32CD32' }, x: -60, y: 120 },
+                                    { name: '项目说明3', value: 6, symbolSize: 70, itemStyle: { color: '#32CD32' }, x: 0, y: 120 },
+                                    { name: '适应症4', value: 6, symbolSize: 70, itemStyle: { color: '#32CD32' }, x: 120, y: -120 },
+                                    { name: '临床意义4', value: 6, symbolSize: 70, itemStyle: { color: '#32CD32' }, x: 60, y: -120 },
+                                    { name: '项目说明4', value: 6, symbolSize: 70, itemStyle: { color: '#32CD32' }, x: 0, y: -120 }
+                                ],
+                                links: [
+                                    { source: '患者', target: '红细胞计数', value: 5, label: '' },
+                                    { source: '患者', target: '血红蛋白', value: 3, label: '' },
+                                    { source: '患者', target: '白细胞计数', value: 3, label: '' },
+                                    { source: '患者', target: '淋巴细胞计数', value: 3, label: '' },
+                                    { source: '红细胞计数', target: '适应症1', value: 3, label: '' },
+                                    { source: '红细胞计数', target: '临床意义1', value: 3, label: '' },
+                                    { source: '红细胞计数', target: '项目说明1', value: 3, label: '' },
+                                    { source: '血红蛋白', target: '适应症2', value: 3, label: '' },
+                                    { source: '血红蛋白', target: '临床意义2', value: 3, label: '' },
+                                    { source: '血红蛋白', target: '项目说明2', value: 3, label: '' },
+                                    { source: '白细胞计数', target: '适应症3', value: 3, label: '' },
+                                    { source: '白细胞计数', target: '临床意义3', value: 3, label: '' },
+                                    { source: '白细胞计数', target: '项目说明3', value: 3, label: '' },
+                                    { source: '淋巴细胞计数', target: '适应症4', value: 3, label: '' },
+                                    { source: '淋巴细胞计数', target: '临床意义4', value: 3, label: '' },
+                                    { source: '淋巴细胞计数', target: '项目说明4', value: 3, label: '' },
+                                ].map(link => ({
+                                    ...link,
+                                    edgeSymbol: link.source.value > link.target.value ? ['none', 'arrow'] : ['arrow', 'none']
+                                })),
+                            },
+                        ],
+                    };
+                    // 使用配置项显示图表
+                    myChart.setOption(option);
+                    
+                    // 添加点击事件
+                    // myChart.on('click', function (params) {
+                    //     if (params.dataType === 'node') {
+                    //         alert(`点击了节点: ${params.data.name}`);
+                    //     }
+                    // });
+                });
+                return {
+                    chartContainer
+                };
+            }
+        });
+
+        app.mount('#app');
+    </script>
+</body>
+</html>
